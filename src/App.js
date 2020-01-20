@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import Loading from './components/Loading';
+import Movie from './components/Movie';
+import MovieNav from './components/MovieNav';
+
+import { Container, Row } from 'react-bootstrap';
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [movies, setMovies] = useState([]);
+
+  const getMovies = async () => {
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get("https://yts-proxy.now.sh/list_movies.json/sort_by=rating");
+    setMovies(movies);
+    setIsLoading(false);
+  }
+
+  useEffect(()=>{
+    getMovies();
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <>
+      <MovieNav />
+      {
+        isLoading ? (
+          <Loading />
+        ) : (
+          <Container>
+          <Row className="justify-content-around">
+          {movies.map(movie => (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                year={movie.year}
+                title={movie.title}
+                summary={movie.summary}
+                poster={movie.medium_cover_image}
+                genres={movie.genres}
+              />
+          ))}
+          </Row>
+          </Container>
+        )
+      }
+      </>
+  )
 }
 
 export default App;
