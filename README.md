@@ -27,4 +27,3 @@ React(hooks), React-bootstrap
 - state 관리와 비동기 동작 구현을 redux-saga를 이용해 한번에 쉽게 해봐야겠다.
 - bootstrap을 날것으로 사용해 봐야겠다
 - firebase보다 aws를 어서 공부해야겠다.
-- .firebase는 왜 안 숨겨지지
